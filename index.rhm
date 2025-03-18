@@ -102,11 +102,11 @@ def examples:
          match v
          | Rect(_, _, _, _): v
          | {"LT": [l, t], "RB": [r, b]}: Rect(l, t, r, b)
-         | {"TL": [t, l], "RB": [b, r]}: Rect(l, t, r, b)
+         | {"TL": [t, l], "BR": [b, r]}: Rect(l, t, r, b)
                                        
-       rect_like_to_rect({"TL": [0, 2], "RB": [10, 5]})
-       // ⇒ Rect(0, 2, 10, 5)
        rect_like_to_rect({"LT": [0, 2], "RB": [10, 5]})
+       // ⇒ Rect(0, 2, 10, 5)
+       rect_like_to_rect({"TL": [0, 2], "BR": [10, 5]})
        // ⇒ Rect(2, 0, 5, 10)
      ),
     (@rhombusblock_etc():
