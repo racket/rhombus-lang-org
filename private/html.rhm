@@ -68,6 +68,7 @@ def_tag title
 def_tag style
 def_tag script
 def_tag body
+def_tag link
 
 def_tag pre
 def_tag img

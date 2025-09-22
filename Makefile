@@ -5,5 +5,5 @@ index:
 
 upload:
 	mkdir -p compiled/web
-	cp *.html *.svg compiled/web
-	raco s3-sync --web compiled/web s3://rhombus-lang.org
+	cp *.html *.svg *.ico *.png compiled/web
+	raco s3-sync --web --check-metadata compiled/web s3://rhombus-lang.org
