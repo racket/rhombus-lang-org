@@ -26,6 +26,3 @@
                   (to-ico 48))
             "favicon.ico"
             #:exists 'truncate)
-
-
-

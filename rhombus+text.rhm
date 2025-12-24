@@ -1,0 +1,25 @@
+#lang rhombus
+import:
+  draw
+  rhombus/logo
+
+def pad = 30
+
+fun e(v): math.exact(math.ceiling(v))
+
+when filesystem.file_exists("/tmp/r+t.svg")
+| filesystem.delete("/tmp/r+t.svg")
+
+def dc = draw.SVGDC([e(logo.size.width) + 1000 + 2 * pad, e(logo.size.height) + 2 * pad],
+                    ~output: Path("/tmp/r+t.svg"))
+
+dc.start()
+logo.draw(dc, ~dx: pad, ~dy: pad)
+dc.font := draw.Font(~name: "Cooper Hewitt", ~weight: 400, ~size: 240)
+let (w, h, a, d) = dc.text_extent("Rhombus")
+dc.text("Rhombus", ~dx: logo.size.width + 30 + pad, ~dy: (logo.size.height - (h - d)) / 1 + pad + 10)
+dc.brush := draw.Brush.none
+// dc.rectangle([0, 0, dc.width, dc.height])
+dc.size
+dc.end()
+
