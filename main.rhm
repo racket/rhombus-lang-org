@@ -1,0 +1,14 @@
+#lang rhombus/static
+
+import:
+  rhombus/collect
+  "private/write.rhm"
+
+  "index.rhm"
+  "download.rhm"
+  "goal.rhm"
+
+write.install(collect.file_path(~collect: "icons",
+                                ~file: "racket-logo.svg"))
+write.install(collect.file_path(~collect: "rhombus-icons",
+                                ~file: "rhombus-logo.svg"))

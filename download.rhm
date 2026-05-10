@@ -1,0 +1,83 @@
+#lang rhombus/static
+
+import:
+  html/page open  
+  "private/style.rhm" open
+  "private/head.rhm"
+  "private/write.rhm"
+
+write.write(
+  "download.html",      
+  html:
+    head:
+      head.usual_head      
+      title:
+        @str{Getting Rhombus}
+    body:
+      div:
+        ~style: (css:
+                   ~display: "flex"
+                   ~flex_direction: "column"
+                   ~align_items: "center"
+                   ~padding_top: "10px")
+        head.rhombus_header("Download")
+        div:
+          ~style: (css:
+                     ~max_width: "600px"
+                     ~margin: "2em 0 0 0")
+          prose:
+            @str{Two options for installing Rhombus:}
+          p:
+            ~style: (css:
+                       ~margin: "2em 0 0 0")
+            row:
+              button:
+                ~href: "https://users.cs.utah.edu/plt/rhombus-snapshots/"
+                @str{Install a snapshot Racket with Rhombus included}
+          p:
+            small_prose:
+              "This is a good option if you don’t already have Racket"
+              "—at least, in the short term and for common machine types."
+              " The snapshot-specific package catalog will eventually expire,"
+              " unlike a regular Racket distribution."
+          p:
+            ~style: (css:
+                       ~margin: "2em 0 0 0")
+            row:
+              button:
+                ~href: "https://download.racket-lang.org/"
+                @str{Install a regular Racket distribution}
+          p:
+            prose:
+              "Then, install the "
+              b:
+                tt: "rhombus"
+              " package in one of these ways:"
+          ul:
+            li:
+              p:
+                prose:
+                  "In DrRacket, choose “Install package...” from the “File” menu"
+              p:
+                prose:
+                  "Enter "
+                  b:
+                    tt:
+                      "rhombus"
+                  " as the package to install."
+            li:
+              p:
+                prose:
+                  "On the command line, run "
+              p:
+                ~style: (css:
+                           ~margin_left: "2em")
+                prose:
+                  b:
+                    tt:
+                      "raco pkg install rhombus"
+          p:
+            small_prose:
+              "This is a good option if you already have Racket,"
+              " need more install options, or need longer-term support."
+)

@@ -1,7 +1,7 @@
 
-.PHONE: index
-index:
-	rhombus index.rhm
+.PHONY: main
+main:
+	rhombus main.rhm
 
 upload:
 	mkdir -p compiled/web

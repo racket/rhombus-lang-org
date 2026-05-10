@@ -1,0 +1,138 @@
+#lang rhombus/static
+import:
+  lib("rhombus/scribble/private/rhombus-spacer.rhm") open
+  "slide_show.rhm" open
+  "rhombus.rhm" open
+  meta_label:
+    rhombus open:
+      except str // workaround spacer limitation, for now
+    only_meta 0:
+      rhombus/meta open
+
+export:
+  examples
+
+def examples:
+  [
+    (@rhombusblock_etc():
+       // simple syntax for everyday tasks
+
+       class Rect(left, top, right, bottom)
+                            
+       fun area(r):
+         let w = r.right - r.left
+         let h = r.bottom - r.top
+         w*h
+                                       
+       area(Rect(0, 0, 10, 5))
+       // ⇒ 50
+     ),
+    (@rhombusblock_etc():
+       // pattern matching on objects, lists, and maps
+
+       class Rect(left, top, right, bottom)
+                            
+       fun rect_like_to_rect(v):
+         match v
+         | Rect(_, _, _, _): v
+         | {"LT": [l, t], "RB": [r, b]}: Rect(l, t, r, b)
+         | {"TL": [t, l], "BR": [b, r]}: Rect(l, t, r, b)
+                                       
+       rect_like_to_rect({"LT": [0, 2], "RB": [10, 5]})
+       // ⇒ Rect(0, 2, 10, 5)
+       rect_like_to_rect({"TL": [0, 2], "BR": [10, 5]})
+       // ⇒ Rect(2, 0, 5, 10)
+     ),
+    (@rhombusblock_etc():
+       // `:` for nesting, `|` for alternatives,
+       // `::` for type-like checked annotations
+                            
+       fun repeat(str :: String, n :: NonnegInt) :: List:
+         if n == 0
+         | []
+         | [str] ++ repeat(str, n-1)
+
+       repeat("hello", 3)
+       // ⇒ ["hello", "hello", "hello"]
+       repeat(3, "hello")
+       // ⇒ error: 3 is not a String
+     ),
+    (@rhombusblock_etc():
+       // ellipses to create and use repetitions
+                            
+       fun all_same([str0, str, ...]):
+         all(str0 == str, ...)
+
+       all_same(["hello", "hello", "hello"])
+       // ⇒ #true
+       all_same(["hello", "goodbye", "hello"])
+       // ⇒ #false
+     ),
+    (@rhombusblock_etc():
+       // pattern matching in all binding positions
+      
+       class Posn(x, y)
+
+       fun flip_all([Posn(x, y), ...]):
+         [Posn(y, x), ...]
+
+       flip_all([Posn(1, 2), Posn(3, 4)])
+       // ⇒ [Posn(2, 1), Posn(4, 3)]
+       flip_all([Posn(5, 6)])
+       // ⇒ [Posn(6, 5)]
+     ),
+    (@rhombusblock_etc():
+       // efficient functional data structures
+
+       class Tree(val, children :: List.of(Tree)):
+         method flatten(): // O(N lg N) for N `val`s
+           for fold(lst = [val]) (child in children):
+             // because append with `++` is O(lg N)
+             lst ++ child.flatten()
+
+       Tree(1, [Tree(2, [Tree(4, [])]),
+                Tree(3, [Tree(5, [])])])
+         .flatten() // ⇒ [1, 2, 4, 3, 5]
+     ),
+    (@rhombusblock_etc():
+       // syntax as data
+      
+       fun interp(e):
+         match e
+         | '$(n :: Number)': n.unwrap()
+         | '$lhs ... + $rhs ...':
+             interp('$lhs ...') + interp('$rhs ...')
+         | '$lhs ... * $rhs ...':
+             interp('$lhs ...') * interp('$rhs ...')
+                             
+       interp('1 + 3 * 4') // '' quotes syntax, not a string
+       // ⇒ 13
+     ),
+    (@rhombusblock_etc():
+       // macros
+      
+       expr.macro '$left but_first $right':
+         'block:
+            $right
+            $left'
+                             
+       println("there") but_first print("hi ")
+       // ⇒ prints "hi there"
+     ),
+    (@rhombusblock_etc():
+       // macros for binding positions and much more
+
+       class Rect(left, top, right, bottom)
+
+       bind.macro 'OriginRect($right, $bottom)':
+         'Rect(0, 0, $right, $bottom)'
+
+       fun area(r):
+         match r
+         | OriginRect(r, b): r*b
+         | Rect(l, t, r, b): (r-l)*(b-t)
+                             
+       area(Rect(0, 0, 10, 5))
+       // ⇒ 50
+     )
+  ]

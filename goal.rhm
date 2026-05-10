@@ -1,0 +1,82 @@
+#lang rhombus/static
+
+import:
+  html/page open  
+  "private/style.rhm" open
+  "private/head.rhm"
+  "private/write.rhm"
+
+write.write(
+  "goal.html",      
+  html:
+    head:
+      head.usual_head      
+      title:
+        @str{Rhombus Goals}      
+    body:
+      div:
+        ~style: (css:
+                   ~display: "flex"
+                   ~flex_direction: "column"
+                   ~align_items: "center"
+                   ~padding_top: "10px")
+        head.rhombus_header("Rhombus Goals")
+      prose_column:
+        p:
+          @str{Modern programming languages reflect a consensus on basic
+               constructs, including functional abstraction,
+               lexically scoped variables, closures, objects, and pattern matching. Why, then,
+               are we creating yet another general-purpose programming language?}
+        p:
+          @str{Beyond the basics, there are still more good ideas for programming constructs
+               than can fit in any one language specification. Furthermore, specific domains benefit
+               from language support that is tailored to the domain.}
+          " "
+          i: "Language extensibility"
+          " "
+          @str{helps to balance the competing goals of a manageable language size versus fit-to-purpose
+               for a wide range of tasks.}
+        p:
+          @str{Many newer languages include a}
+          " "
+          i: "macro system"
+          " "
+          @str{to enable extensibility, but
+               few would argue that the new batch of macro systems have achieved the
+               expressiveness and fluidity of macros as they exist within the
+               Lisp tradition, which includes}
+          " "
+          a:
+            ~href: "https://racket-lang.org/"
+            "Racket"
+          @str{. At the same time, that expressiveness has been difficult to detangle
+               from Lisp’s minimalistic, parenthesis-oriented notation.}
+        p:
+          @str{Rhombus is designed to be}
+          ul:
+            li:
+              p:
+                @str{approachable and easy to use for everyday purposes (that do not need macros),
+                     which in part means a conventional syntax; and}
+            li:
+              p:
+                @str{as extensible as Racket, while making Racket's state-of-the-art facilities
+                     more consistent and accessible to a wide audience.}
+        p:
+          ~style: (css: ~margin_top: "2em")
+          @str{More resources:}
+          ul:
+            li:
+              a:
+                ~href: "https://www.youtube.com/watch?v=hkiy1rmKA48"
+                "Recorded talk"
+              " from OOPSLA’23"
+            li:
+              a:
+                ~href: "https://doi.org/10.1145/3622818"
+                "Rhombus: A New Spin on Macros without All the Parentheses"
+            li:
+              a:
+                ~href: "https://dl.acm.org/doi/10.1145/3127323"
+                "A Programmable Programming Language"
+)

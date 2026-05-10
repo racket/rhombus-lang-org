@@ -1,0 +1,20 @@
+#lang rhombus/static
+
+import:
+  html
+
+export:
+  write
+  install
+
+fun write(dest, h :~ html.Element):
+  println("writing " +& dest)
+  Port.Output.using ~file dest:
+    ~exists: #'truncate
+    html.write(html.Document(~content: [h],
+                             ~doctype: html.DocumentType(~name: "html")))
+
+fun install(path :: Path):
+  let to = path.name()
+  println("copying " +& to)
+  filesystem.copy(path, to, ~exists_ok: #true)

@@ -1,0 +1,71 @@
+#lang rhombus/static
+import:
+  html as html_lib:
+    expose:
+      write as html_write
+      Element
+      Document
+      DocumentType
+  html/page open  
+  "style.rhm" open
+  "slide_show.rhm":
+    expose:
+      slide_show_style
+      slide_show_script
+  "rhombus.rhm":
+    expose:
+      rhombus_styles
+      typeset
+
+export:
+  usual_head
+  rhombus_header
+  
+def usual_head:
+  @List(
+    meta:
+      ~content: "text/html; charset=utf-8"
+      ~http_equiv: "content-type"
+    style:
+      @str|{@import url("https://docs.racket-lang.org/manual-fonts.css");}|          
+    style:
+      slide_show_style
+    style:
+      the_styles.to_css()
+    style:
+      rhombus_styles.to_css()
+    script:
+      slide_show_script
+    link:
+      ~rel: "icon"
+      ~type: "image/x-icon"
+      ~href: "favicon.ico"
+    link:
+      ~rel: "icon"
+      ~type: "image/svg+xml"
+      ~href: "rhombus-logo.svg"
+    link:
+      ~rel: "mask-icon"
+      ~href: "rhombus-logo-mask.svg"
+      ~color: "red"
+  )
+
+fun rhombus_header(title):  
+  div:
+    ~style: (css:
+               ~display: "flex"
+               ~flex_direction: "row"
+               ~align_items: "center")
+    img:
+      ~src: "rhombus-logo.svg"
+      ~width: 470 / 4.0
+      ~height: 329 / 4.0
+      ~style: (css:
+                 ~vertical_align: "middle")
+    span:
+      ~style: (css:
+                 ~margin_top: "20px"
+                 ~vertical_align: "middle"
+                 ~padding_left: "10px")
+      namefont:
+        title
