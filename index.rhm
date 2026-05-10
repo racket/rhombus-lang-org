@@ -8,6 +8,15 @@ import:
   "private/example.rhm" open
   "private/write.rhm"
 
+def doc_url = "https://docs.racket-lang.org/rhombus/index.html?fam=Rhombus&famroot=rhombus"
+
+fun docs(name, dir):
+  a:
+    ~href: "https://docs.racket-lang.org/" ++ dir ++ "/index.html?fam=Rhombus&famroot=rhombus"
+    name
+
+operator a +% b: [a, b]
+
 write.write(
   "index.html",      
   html:
@@ -22,18 +31,21 @@ write.write(
                    ~flex_direction: "column"
                    ~align_items: "center"
                    ~padding_top: "10px")
-        head.rhombus_header([div:
-                               ~style: (css:
-                                          ~display: "flex"
-                                          ~margin_right: "2em")
-                               button:
-                                 ~href: "download.html"
-                                 @str{Download},
-                             div:
-                               ~style: (css: ~display: "flex")
-                               outline_button:
-                                 ~href: "https://docs.racket-lang.org/rhombus/index.html?fam=Rhombus&famroot=rhombus"
-                                 @str{Documentation}])
+        head.rhombus_header(~rhs:
+                              [div:
+                                 ~style: (css:
+                                            ~display: "flex"
+                                            ~margin_right: "2em"
+                                            ~margin_left: "8em")
+                                 outline_button:
+                                   ~href: doc_url
+                                   @str{Documentation},
+                               div:
+                                 ~style: (css:
+                                            ~display: "flex")
+                                 button:
+                                   ~href: "download.html"
+                                   @str{Download}])
         div:
           ~style: (css: ~padding: "20px")
           prose:
@@ -95,34 +107,34 @@ write.write(
                   ~href: "goal.html"
                   "Rhombus Goals"
                 "."
-          tabular:
-            ~style: (css:
-                       ~gap: "1em"
-                       ~justify_items: "start")
-            button:
-              ~href: "download.html"
-              @str{Download}
+          column:
             small_prose:
-              "Rhombus is ready for "
-              b:
-                ~style: (css:
-                           ~white_space: "nowrap")
-                "early adopters"
+              ~style: (css:
+                         ~margin_bottom: "1em")
+              "Rhombus includes libraries for "
+              docs("HTML", "rhombus-html") +% ", "
+              docs("JSON", "rhombus-json") +% ", "
+              docs("XML", "rhombus-xml") +% ", "
+              docs("HTTP", "rhombus-http") +% ", "
+              // docs("SSL", "rhombus-ssl") +% ", "
+              docs("drawing", "rhombus-draw") +% ", "
+              docs("GUIs", "rhombus-gui") +% ", "
+              docs("parsing", "rhombus-parser") +% ", "
+              // docs("calling C libraries", "rhombus-ffi") +% ", "
+              docs("documentation", "rhombus-scribble") +% ", "
+              docs("animated slides", "rhombus-slideshow") +% ", "
+              " and "
+              a:
+                ~href: doc_url
+                "more"
               "."
-            outline_button:
-              ~href: "https://docs.racket-lang.org/rhombus/index.html?fam=Rhombus&famroot=rhombus"
-              @str{Documentation}
-            div:
-              ~style: (css: ~margin: "0.25em 0 0 0")
+            tabular:
+              ~style: (css:
+                         ~gap: "1em"
+                         ~justify_items: "start")
+              outline_button:
+                ~href: "https://github.com/racket/rhombus"
+                @str{Work in Progress}
               small_prose:
-                "Includes a "
-                a:
-                  ~href: "https://docs.racket-lang.org/rhombus-guide/Quick_Start.html"
-                  "Quick Start"
-                "."
-            button:
-              ~href: "https://github.com/racket/rhombus"
-              @str{Work in Progress}
-            small_prose:
-                "Nearly done—version 1.0 coming soon."
+                  "Nearly done: version 1.0 is coming soon!"
 )

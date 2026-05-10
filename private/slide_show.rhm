@@ -102,8 +102,8 @@ pre {
   background-color: #5e7bc9;
 }
 
-.outline_button:hover {
-  background-color: #3e5ba9;
+.outline-button:hover {
+  background-color: #5e7bc9;
   color: white;
 }
 

@@ -47,7 +47,7 @@ def examples:
        // `:` for nesting, `|` for alternatives,
        // `::` for type-like checked annotations
                             
-       fun repeat(str :: String, n :: NonnegInt) :: List:
+       fun repeat(str :: String, n :: Nat) :: List:
          if n == 0
          | []
          | [str] ++ repeat(str, n-1)
@@ -56,6 +56,17 @@ def examples:
        // ⇒ ["hello", "hello", "hello"]
        repeat(3, "hello")
        // ⇒ error: 3 is not a String
+     ),
+    (@rhombusblock_etc():
+       // `for` as a general-purpose iteration and
+       // comprehension form
+                            
+       fun i_repeat(str :: String, n :: Nat) :: List:
+         for List (i in 0..n):
+           i+1 +& ". " +& str
+
+       i_repeat("hello", 3)
+       // ⇒ ["1. hello", "2. hello", "3. hello"]
      ),
     (@rhombusblock_etc():
        // ellipses to create and use repetitions
@@ -85,9 +96,9 @@ def examples:
        // efficient functional data structures
 
        class Tree(val, children :: List.of(Tree)):
-         method flatten(): // O(N lg N) for N `val`s
+         method flatten(): // O(N log N) for N `val`s
            for fold(lst = [val]) (child in children):
-             // because append with `++` is O(lg N)
+             // because append with `++` is O(log N)
              lst ++ child.flatten()
 
        Tree(1, [Tree(2, [Tree(4, [])]),

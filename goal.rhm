@@ -20,7 +20,7 @@ write.write(
                    ~flex_direction: "column"
                    ~align_items: "center"
                    ~padding_top: "10px")
-        head.rhombus_header("Rhombus Goals")
+        head.rhombus_header(~title: "Rhombus Goals")
       prose_column:
         p:
           @str{Modern programming languages reflect a consensus on basic

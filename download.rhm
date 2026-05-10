@@ -20,7 +20,7 @@ write.write(
                    ~flex_direction: "column"
                    ~align_items: "center"
                    ~padding_top: "10px")
-        head.rhombus_header("Download")
+        head.rhombus_header(~title: "Rhombus Download")
         div:
           ~style: (css:
                      ~max_width: "600px"
