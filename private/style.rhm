@@ -65,6 +65,20 @@ styles the_styles:
     ~align_self: "start"
     ~white_space: "nowrap"
 
+  a.def outline_button:
+    ~padding: "8px"
+    ~padding_top: "11px"
+    ~border: "2px solid #3e5ba9"
+    ~border_radius: "3px"
+    ~background_color: "transparent"
+    ~color: "#3e5ba9"
+    ~font_family: name_font
+    ~font_size: "14pt"
+    ~text_decoration: "none"
+    ~transform: "skew(-0.3rad)"
+    ~align_self: "start"
+    ~white_space: "nowrap"
+
   div.def tabular:
     ~display: "grid"            
     ~grid_template_columns: "repeat(2, auto)"

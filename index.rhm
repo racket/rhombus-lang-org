@@ -22,7 +22,18 @@ write.write(
                    ~flex_direction: "column"
                    ~align_items: "center"
                    ~padding_top: "10px")
-        head.rhombus_header("Rhombus")
+        head.rhombus_header([div:
+                               ~style: (css:
+                                          ~display: "flex"
+                                          ~margin_right: "2em")
+                               button:
+                                 ~href: "download.html"
+                                 @str{Download},
+                             div:
+                               ~style: (css: ~display: "flex")
+                               outline_button:
+                                 ~href: "https://docs.racket-lang.org/rhombus/index.html?fam=Rhombus&famroot=rhombus"
+                                 @str{Documentation}])
         div:
           ~style: (css: ~padding: "20px")
           prose:
@@ -98,7 +109,7 @@ write.write(
                            ~white_space: "nowrap")
                 "early adopters"
               "."
-            button:
+            outline_button:
               ~href: "https://docs.racket-lang.org/rhombus/index.html?fam=Rhombus&famroot=rhombus"
               @str{Documentation}
             div:

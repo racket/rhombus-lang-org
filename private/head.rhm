@@ -50,9 +50,10 @@ def usual_head:
       ~color: "red"
   )
 
-fun rhombus_header(title):  
+fun rhombus_header(rhs):  
   div:
     ~style: (css:
+               ~width: "800px"
                ~display: "flex"
                ~flex_direction: "row"
                ~align_items: "center")
@@ -68,4 +69,9 @@ fun rhombus_header(title):
                  ~vertical_align: "middle"
                  ~padding_left: "10px")
       namefont:
-        title
+        "Rhombus"
+    div:
+      ~style: (css:
+                 ~display: "flex"
+                 ~flex_grow: "1")
+    rhs

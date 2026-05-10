@@ -102,6 +102,11 @@ pre {
   background-color: #5e7bc9;
 }
 
+.outline_button:hover {
+  background-color: #3e5ba9;
+  color: white;
+}
+
 a {
  text-decoration: none;
  color: rgb(0, 119, 170);
