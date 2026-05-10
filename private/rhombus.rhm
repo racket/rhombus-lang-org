@@ -1,6 +1,6 @@
 #lang rhombus
 import:
-  "html.rhm" open
+  html/page open
   shrubbery/render
   shrubbery/render/define.macros as render_macros
   lib("rhombus/scribble/private/typeset-key-help.rkt").#{target-id-key-symbol}
@@ -13,16 +13,18 @@ export:
   rhombusblock
   rhombusblock_etc
   typeset
+  rhombus_styles
 
-span.def literal:
-  ~color: "#228b22"
-span.def paren:
-  ~color: "#843c24"
-span.def comment:
-  ~color: "#c2741f"
+styles rhombus_styles:
+  span.def literal:
+    ~color: "#228b22"
+  span.def paren:
+    ~color: "#843c24"
+  span.def comment:
+    ~color: "#c2741f"
 
-a.def doc_a:
-  ~color: "rgb(0, 119, 170)"
+  a.def doc_a:
+    ~color: "rgb(0, 119, 170)"
 
 class Fmt(s, style = #false)
 
@@ -72,7 +74,7 @@ def (render_line, render_block):
                                           ~href:
                                             "https://docs.racket-lang.org/" +& ps[ps.length()-2] +& "/" +& ps[ps.length()-1]
                                               +& "#" +& anchor
-                                          str
+                                          to_string(str)
                                       )
                                   | ~else:
                                       Fmt(str),

@@ -1,8 +1,14 @@
-#lang rhombus
+#lang rhombus/static
 import:
   rhombus/collect
+  html as html_lib:
+    expose:
+      write as html_write
+      Element
+      Document
+      DocumentType
+  html/page open
   lib("rhombus/scribble/private/rhombus-spacer.rhm") open
-  "private/html.rhm" open  
   "private/slide_show.rhm" open
   "private/rhombus.rhm" open
   meta_label:
@@ -15,65 +21,66 @@ def name_font = "'Cooper-Hewitt'"
 def text_font = "'Charter-Racket', serif"
 def text_size = "14pt"
 
-span.def namefont:
-  ~font_family: name_font
-  ~font_size: "40pt"
+styles the_styles:
+  span.def namefont:
+    ~font_family: name_font
+    ~font_size: "40pt"
 
-span.def prose:
-  ~font_family: text_font
-  ~font_size: text_size
+  span.def prose:
+    ~font_family: text_font
+    ~font_size: text_size
 
-span.def small_prose:
-  ~font_family: text_font
-  ~font_size: "12pt"
+  span.def small_prose:
+    ~font_family: text_font
+    ~font_size: "12pt"
 
-div.def prose_column:
-  ~font_family: text_font
-  ~font_size: text_size
-  ~max_width: "40em"
-  ~margin: "auto"
+  div.def prose_column:
+    ~font_family: text_font
+    ~font_size: text_size
+    ~max_width: "40em"
+    ~margin: "auto"
 
-div.def slideshow_container:«»
-a.def next:«»
-a.def prev:«»
-div.def numbertext:«»
-div.def mySlides:«»
-span.def dot:«»
-div.def text:«»
+  div.def slideshow_container:«»
+  a.def next:«»
+  a.def prev:«»
+  div.def numbertext:«»
+  div.def mySlides:«»
+  span.def dot:«»
+  div.def text:«»
 
-span.def tt:
-  ~font_family: "'Fira-Mono', monospace"
+  span.def tt:
+    ~font_family: "'Fira-Mono', monospace"
 
-div.def column:
-  ~margin_left: "3em"
-  ~margin_right: "3em"
-  ~display: "flex"
-  ~flex_direction: "column"
-  ~align_items: "left"
-  ~max_width: "20em"
+  div.def column:
+    ~margin_left: "3em"
+    ~margin_right: "3em"
+    ~display: "flex"
+    ~flex_direction: "column"
+    ~align_items: "left"
+    ~max_width: "20em"
 
-div.def row:
-  ~display: "flex"
-  ~flex_direction: "row"
-  ~align_items: "top"
+  div.def row:
+    ~display: "flex"
+    ~flex_direction: "row"
+    ~align_items: "top"
 
-a.def button:
-  ~padding: "10px"
-  ~padding_top: "13px"
-  ~border_radius: "3px"
-  ~background_color: "#3e5ba9"
-  ~color: "white"
-  ~font_family: name_font
-  ~font_size: "14pt"
-  ~text_decoration: "none"
-  ~transform: "skew(-0.3rad)"
-  ~align_self: "start"
-  ~white_space: "nowrap"
+  a.def button:
+    ~padding: "10px"
+    ~padding_top: "13px"
+    ~border_radius: "3px"
+    ~background_color: "#3e5ba9"
+    ~color: "white"
+    ~font_family: name_font
+    ~font_size: "14pt"
+    ~text_decoration: "none"
+    ~transform: "skew(-0.3rad)"
+    ~align_self: "start"
+    ~white_space: "nowrap"
 
-div.def tabular:
-  ~display: "grid"            
-  ~grid_template_columns: "repeat(2, auto)"
-  ~max_width: "22em"
+  div.def tabular:
+    ~display: "grid"            
+    ~grid_template_columns: "repeat(2, auto)"
+    ~max_width: "22em"
                          
 fun code(stx :: Syntax):
   stx.to_source_string(~keep_prefix: #true, ~keep_suffix: #true)
@@ -213,7 +220,9 @@ def usual_head:
     style:
       slide_show_style
     style:
-      all_styles()
+      the_styles.to_css()
+    style:
+      rhombus_styles.to_css()
     script:
       slide_show_script
     link:
@@ -230,12 +239,11 @@ def usual_head:
       ~color: "red"
   )
 
-fun write(dest, doc):
+fun write(dest, h :~ Element):
   println("writing " +& dest)
   Port.Output.using ~file dest:
     ~exists: #'truncate
-    println("<!DOCTYPE html>")
-    write_html(doc)
+    html_write(Document(~content: [h], ~doctype: DocumentType(~name: "html")))
 
 fun rhombus_header(title):  
   div:
