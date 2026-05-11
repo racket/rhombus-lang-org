@@ -6,13 +6,29 @@ export:
   all_defined
 
 def name_font = "'Cooper-Hewitt'"
+def section_font = "'Open Sans'"
 def text_font = "'Charter-Racket', serif"
 def text_size = "14pt"
+def small_size = "12pt"
+def tiny_size = "10pt"
 
 styles the_styles:
   span.def namefont:
     ~font_family: name_font
     ~font_size: "40pt"
+
+  span.def major_section:
+    ~font_family: section_font
+    ~font_size: "24pt"
+    ~color: "#9f1d20"
+
+  span.def big_head:
+    ~font_family: section_font
+    ~font_size: "20pt"
+
+  span.def small_head:
+    ~font_family: section_font
+    ~font_size: small_size
 
   span.def prose:
     ~font_family: text_font
@@ -20,7 +36,7 @@ styles the_styles:
 
   span.def small_prose:
     ~font_family: text_font
-    ~font_size: "12pt"
+    ~font_size: small_size
 
   div.def prose_column:
     ~font_family: text_font

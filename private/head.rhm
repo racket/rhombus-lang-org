@@ -11,7 +11,6 @@ import:
   "slide_show.rhm":
     expose:
       slide_show_style
-      slide_show_script
   "rhombus.rhm":
     expose:
       rhombus_styles
@@ -20,6 +19,9 @@ import:
 export:
   usual_head
   rhombus_header
+  head_width
+
+def head_width = "700px"
   
 def usual_head:
   @List(
@@ -34,8 +36,6 @@ def usual_head:
       the_styles.to_css()
     style:
       rhombus_styles.to_css()
-    script:
-      slide_show_script
     link:
       ~rel: "icon"
       ~type: "image/x-icon"
@@ -54,7 +54,7 @@ fun rhombus_header(~title: title = "Rhombus",
                    ~rhs: rhs = []):
   div:
     ~style: (css:
-               ~width: "700px"
+               ~width: head_width
                ~display: "flex"
                ~flex_direction: "row"
                ~align_items: "center")

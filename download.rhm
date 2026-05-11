@@ -12,7 +12,7 @@ write.write(
     head:
       head.usual_head      
       title:
-        @str{Getting Rhombus}
+        @str{Rhombus Download}
     body:
       div:
         ~style: (css:

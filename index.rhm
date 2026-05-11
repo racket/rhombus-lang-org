@@ -1,11 +1,12 @@
 #lang rhombus/static
 
 import:
-  html/page open  
+  html/page open
   "private/style.rhm" open
   "private/head.rhm"
   "private/rhombus.rhm".typeset
   "private/example.rhm" open
+  "private/slide_show.rhm"
   "private/write.rhm"
 
 def doc_url = "https://docs.racket-lang.org/rhombus/index.html?fam=Rhombus&famroot=rhombus"
@@ -18,10 +19,12 @@ fun docs(name, dir):
 operator a +% b: [a, b]
 
 write.write(
-  "index.html",      
+  "index.html", 
   html:
     head:
       head.usual_head      
+      script:
+        slide_show.slide_show_script
       title:
         @str{Rhombus Programming Language}
     body:
@@ -80,34 +83,14 @@ write.write(
           column:
             div:
               ~style: (css:
-                         ~display: "flex"
-                         ~flex_direction: "row"
-                         ~align_items: "center")
-              img:
-                ~src: "racket-logo.svg"
-                ~width: 50
-                ~height: 50
-                ~style: (css: ~padding_right: "0.5em")
-              div:
-                prose:
-                  "Built on "
-                  a:
-                    ~href: "http://racket-lang.org/"
-                    "Racket"
-            div:
-              small_prose:
-                "... which means that Rhombus is compiled to machine code on-the-fly, "
-                "benefits from a mature tool chain and package system, "
-                "and has many practical libraries within reach."
-            div:
-              ~style: (css: ~padding_top: "0.5em")
+                         ~margin_top: "0.5em"
+                         ~margin_bottom: "0.5em")
               small_prose:
                 "Why a new language? See "
                 a:
                   ~href: "goal.html"
                   "Rhombus Goals"
                 "."
-          column:
             small_prose:
               ~style: (css:
                          ~margin_bottom: "1em")
@@ -137,4 +120,30 @@ write.write(
                 @str{Work in Progress}
               small_prose:
                   "Nearly done: version 1.0 is coming soon!"
+          column:
+            div:
+              ~style: (css:
+                         ~display: "flex"
+                         ~flex_direction: "row"
+                         ~align_items: "center")
+              img:
+                ~src: "racket-logo.svg"
+                ~width: 50
+                ~height: 50
+                ~style: (css: ~padding_right: "0.5em")
+              div:
+                prose:
+                  "Built on "
+                  a:
+                    ~href: "http://racket-lang.org/"
+                    "Racket"
+            div:
+              small_prose:
+                "... which means that Rhombus is compiled to machine code on-the-fly, "
+                "benefits from a mature tool chain and package system, "
+                "and has many additional libraries within "
+                a:
+                  ~href: "https://docs.racket-lang.org/rhombus-racket/index.html?fam=Rhombus&famroot=rhombus"
+                  "easy reach"
+                "."
 )

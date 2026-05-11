@@ -1,0 +1,62 @@
+#lang rhombus/static/and_meta
+
+import:
+  rhombus/rx open
+  rhombus/runtime_path
+  json
+
+export:
+  extract
+
+runtime_path.def vers_dir: "../versions"
+
+fun extract(vers :: String) :: List.of(Map):
+  let all_installers :: Map.of(String, Map):
+    Port.Input.using ~file vers_dir +/ vers.replace(".", "_", ~all: #true)++".json":
+      json.read()
+  let installers:
+    for List ((k, v) in all_installers):
+      keep_when k.starts_with("{1} Racket with Rhombus")
+      skip_when k.contains("versionless")
+      let m = rx'[! "|"]* "| "
+                   ++ "{" ($name_order: [! "}"]*) "} " ($name: [! "|"]*) " | "
+                   ++ ($tail: .*)'.match_in(k)
+      let m_tail = rx'"{" ($detail_order: [! "}"]*) "} " ($detail: [! "|;"]*)'.match_in(m!![#'tail])
+      let name = m!![#'name]
+      unless m | error("no match", error.val(k))
+      { "platform": if m_tail
+                    | name
+                    | "Source",
+        "label": if m_tail
+                 | name +& " (" +& (m_tail!![#'detail]) +& ")"
+                 | m!![#'tail],
+        "order": String.to_int(m!![#'name_order]),
+        "detail_order": if m_tail
+                        | String.to_int(m_tail!![#'detail_order])
+                        | if k.contains("built")
+                          | 0
+                          | 1,
+        "installer": v["filename"],
+        "human_size": human_size(v["size"]),
+        "platform": name,
+        "size": v["size"] }
+  installers.sort(fun (v1 :: Map, v2 :: Map):
+                    if v1["order"] == v2["order"]
+                    | v1["detail_order"] :: Int < v2["detail_order"]
+                    | v1["order"] :: Int <= v2["order"])
+
+fun human_size(amt):
+  def kb = 1024
+  def mb = kb * 1024
+  def gb = mb * 1024
+  fun mk(amt, unit):
+    str.f(amt, ~precision: (if amt < 20 | 1 | 0)) ++ unit
+  cond
+  | amt > gb / 2:
+      mk(amt / gb, "GB")
+  | amt > mb / 2:
+      mk(amt / mb, "MB")
+  | amt > kb / 2:
+      mk(amt / kb, "KB")
+  | ~else:
+      mk(amt, "B")
