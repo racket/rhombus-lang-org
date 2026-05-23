@@ -48,7 +48,7 @@ write.write(
              @a(~href: doc_url){extensive documentation}, and
              @a(~href: pkg_url){practical libraries}. It's a dynamic language
              that offers interactivity and flexibility, but it also has the
-             the kinds of static and abstraction-enforcing constructs that are
+             static and abstraction-enforcing constructs that are
              needed to scale from small scripts to large systems.}
         q:
           @{Aren't there a lot of languages like that already?}
@@ -80,7 +80,7 @@ write.write(
           @{Rhombus is built on @a(~href: "https://racket-lang.org"){Racket}, and
             it relies on many Racket tools, including the DrRacket programming
             environment and the @tt{raco} command-line suite.
-            In many ways, the languages
+            Roughly, the languages
             are related in the same way as
             @a(~href: "https://elixir-lang.org/"){Elixir} and
             @a(~href: "https://www.erlang.org/"){Erlang}
@@ -90,7 +90,7 @@ write.write(
           @{Then again, it would be fair to say
             that Rhombus @i{is} just Racket, because Racket is meant to be a multi-language
             ecosystem. Rhombus, in turn, is meant to push Racket's multi-language capabilities forward
-            and enable other languages, dialects, or whatever you'd like to call them.}
+            and enable other languages and dialects that are built on Racket and Rhombus.}
         q:
           @{Rhombus is Racket without S-expressions, so the syntax is not homoiconic, right?}
         p:
@@ -98,7 +98,7 @@ write.write(
             @a(~href: "https://parentheticallyspeaking.org/articles/bicameral-not-homoiconic/"){bicameral}
             syntax, where the analog to the S-expression layer is
             @a(~href: "https://docs.racket-lang.org/shrubbery/index.html?fam=Rhombus&famroot=rhombus"){shrubbery notation}.
-            It's an important part of Rhombus's approach to macros and metaprogramming.
+            This is an important part of Rhombus's approach to macros and metaprogramming.
             You might be amused by this @a(~href: mc_url){little metacircular interpreter}.}
         q:
           @{Is Rhombus useful only if I want to get into extensible languages,
@@ -112,7 +112,7 @@ write.write(
             If you enjoy functional, dynamic languages and are interested in a modern
             synthesis, Rhombus might be for you.}
         q:
-          @{Seriously, though — are @i{macros} a good idea?}
+          @{Are @i{macros} actually a good idea?}
         p:
           @{The design of Rhombus reflects a conviction that @i{metaprogramming}
             is fundamental to software construction, and that the most effective
@@ -144,12 +144,12 @@ write.write(
         q:
           @{Do we need new programmings languages or DSLs in an age of autonomous coding agents?}
         p:
-          @{Honestly, who knows?}
+          @{Who knows?}
         p:
-          @{A popular early prediction was that AI coding would spell the end of new languages,
+          @{A common early prediction around AI coding was that it would spell the end of new languages,
             because AI would only be able to use the most popular languages as
             represented in training data. That prediction has not panned out. As of May 2026,
-            (even before Rhombus 1.0), coding agents are good at writing idiomatic
+            (even before Rhombus 1.0), coding agents are pretty good at writing idiomatic
             Rhombus code. Maybe @a(~href: doc_url){good documentation} helps.}
         p:
           @{As for DSLs, it seems possible that raising the level of discourse in programming

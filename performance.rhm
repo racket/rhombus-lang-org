@@ -51,7 +51,8 @@ write.write(
               Java OpenJDK 26.0.1, Node.js v24.3.0, SBCL 2.4.4,
               Rhombus 0.45 on Racket 9.2.0.5, Ruby 2.6.10p210,
               and Python 3.13.7; running 10 iterations of each
-              behcmark. This is a good-faith effort to
+              behcmark. The Rhombus and SBCL implementations
+              are new. This is a good-faith effort to
               report a useful, order-of-magnitude comparison,
               but it could be wrong.}
         p:
