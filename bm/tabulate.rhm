@@ -1,0 +1,126 @@
+#lang rhombus/static/and_meta
+import:
+  rhombus/runtime_path
+  draw
+  pict
+
+def noisy = #false
+
+runtime_path.def result_txt: "result.txt"
+
+def lines = filesystem.read_lines(result_txt)
+
+def baseline = "Java"
+
+def colors:
+  { "Java": "lightgreen",
+    "Node": "green",
+    "SBCL": "forestgreen",
+    "Rhombus~": "red",
+    "Rhombus": #false,
+    "Ruby": "blue",
+    "Python": "darkblue" }
+def text_color:
+  for Map ((k, v) in colors):
+    values(k,
+           if k == "Rhombus~"
+           | v
+           | "black")
+
+def mutable msecs :: Map.of(String, Map.of(String, Int)) = {}
+
+for (line in lines):
+  let cols = line.split()
+  let [bm, who, _, _, _, ms] = cols
+  msecs := msecs ++ { bm: (msecs.maybe[bm] || {}) ++ { who: ms.to_int() }}
+
+def { bm: _, ... } = msecs
+
+def bms = [bm, ...].sort(fun (a, b):
+                           msecs[a][baseline] < msecs[b][baseline])
+
+def { who: _, ... } = msecs[bms[0]]
+
+def avgs :~ Map.of(String, Number):
+  let msecs = msecs
+  for Map (who in [who, ...]):
+    let ns = [ msecs[bm][who] / msecs[bm][baseline], ... ]
+    let avg = 1.0 * math.expt(math.product(& ns), 1/ns.length())
+    values(who, avg)
+
+def [who_ordered, ...] = [who, ...].sort(fun (a, b): avgs[a] < avgs[b]).filter(~keep: fun(s): colors[s])
+
+fun rename(s):
+  if s == "Rhombus~"
+  | "Rhombus"
+  | s
+
+fun plot(~label: title :: String, data :: Map):
+  let HEIGHT = 20
+  let WIDTH = 400
+  let [label, ...] = [pict.text(rename(who_ordered)).colorize(text_color[who_ordered]), ...]
+  let biggest = math.ceiling(math.max(data[who], ...))
+  let [bar, ...] = [pict.beside(
+                      ~sep: 5,
+                      pict.rectangle(~height: HEIGHT,
+                                     ~width: (data[who_ordered] / biggest) * WIDTH,
+                                     ~fill: colors[who_ordered]),
+                      pict.text("×" ++ @str.f(data[who_ordered], ~precision: 1))
+                        .colorize(colors[who_ordered])
+                    ),
+                    ...]
+  let p:
+    pict.table(
+      ~hsep: 5,
+      [[label, bar],
+       ...]
+    )
+  let p:
+    pict.overlay.top_right(p,
+                           pict.stack.left(
+                             @pict.text("Run time relative to " ++ baseline),
+                             @pict.text("(shorter is better)")
+                           ))
+  pict.stack.left(
+    ~sep: 2,
+    pict.text(title, ~font: draw.Font(~weight: #'bold)),
+    p
+  )
+
+def bm_plots:
+  for List (bm in [bm, ...]):
+    let r:
+      for Map (who in [who, ...]):
+        let n = 1.0 * (msecs[bm][who] / msecs[bm][baseline])
+        values(who, n)
+    let p = plot(~label: bm, r)
+    when noisy
+    | println(bm)
+      println(r, ~pretty: #true)
+      println(p)
+    p
+
+when noisy
+| avgs
+
+def avg_plot:
+  plot(~label: "Geometic mean", avgs)
+
+avg_plot
+
+def bms_plot:
+  pict.stack.left(~sep: 20,
+                  & bm_plots)
+
+bms_plot
+
+fun save_to_file(p :: pict.Pict, filename :: PathString):
+  let dc = draw.SVGDC([math.exact(math.ceiling(p.width)),
+                       math.exact(math.ceiling(p.height))],
+                      ~output: Path(filename))
+  dc.start()
+  p.draw(dc)
+  dc.end()
+  
+save_to_file(avg_plot, "../awfy.svg")
+save_to_file(bms_plot, "../awfy_bms.svg")

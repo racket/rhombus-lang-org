@@ -6,6 +6,12 @@ import:
   "private/head.rhm"
   "private/write.rhm"
 
+def doc_url:
+  "https://docs.racket-lang.org/rhombus/index.html?fam=Rhombus&fam=rhombus"
+
+def pkg_url:
+  "https://pkgs.racket-lang.org?fam=Rhombus"
+
 write.write(
   "goal.html",      
   html:
@@ -23,26 +29,20 @@ write.write(
         head.rhombus_header(~title: "Rhombus Goals")
       prose_column:
         p:
-          @str{Modern programming languages reflect a consensus on basic
-               constructs, including functional abstraction,
-               lexically scoped variables, closures, objects, and pattern matching. Why, then,
-               are we creating yet another general-purpose programming language?}
+          @{Modern programming languages reflect a consensus
+               on the the most important programming concepts, including
+               lexically scoped variables, closures, objects, pattern matching,
+               and type parametricity.
+               Why, then, yet another programming language?}
         p:
-          @str{Beyond the basics, there are still more good ideas for programming constructs
+          @{Beyond the basics, there are still more good ideas for programming constructs
                than can fit in any one language specification. Furthermore, specific domains benefit
-               from language support that is tailored to the domain.}
-          " "
-          i: "Language extensibility"
-          " "
-          @str{helps to balance the competing goals of a manageable language size versus fit-to-purpose
+               from language support that is tailored to the domain. @i{Language extensibility}
+               helps to balance the competing goals of a manageable language size versus fit-to-purpose
                for a wide range of tasks.}
         p:
-          @str{Many newer languages include a}
-          " "
-          i: "macro system"
-          " "
-          @str{to enable extensibility, but
-               few would argue that the new batch of macro systems have achieved the
+          @{Many newer languages include a macro system to enable extensibility, but
+               other macro systems have not achieved the
                expressiveness and fluidity of macros as they exist within the
                Lisp tradition, which includes}
           " "
@@ -52,20 +52,29 @@ write.write(
           @str{. At the same time, that expressiveness has been difficult to detangle
                from Lisp’s minimalistic, parenthesis-oriented notation.}
         p:
-          @str{Rhombus is designed to be}
+          @{Rhombus is designed to be}
           ul:
             li:
               p:
-                @str{approachable and easy to use for everyday purposes (that do not need macros),
+                @{approachable and easy to use for everyday purposes (that do not need macros),
                      which in part means a conventional syntax; and}
             li:
               p:
-                @str{as extensible as Racket, while making Racket's state-of-the-art facilities
+                @{as extensible as Racket, while making Racket's state-of-the-art facilities
                      more consistent and accessible to a wide audience.}
         p:
           ~style: (css: ~margin_top: "2em")
           @str{More resources:}
           ul:
+            li:
+              a:
+                ~href: "https://rhombus-lang.org/"
+                "Rhombus"
+              " main site"
+            li:
+              a:
+                ~href: "faq.html"
+                "Frequently Asked Questions"
             li:
               a:
                 ~href: "https://www.youtube.com/watch?v=hkiy1rmKA48"
