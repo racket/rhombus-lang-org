@@ -152,12 +152,12 @@ write.write(
                 "."
         section_column:
           section_head:
-              "More About Rhombus"
+              "About Rhombus"
           section_content:
             section_entry:
               entry_a:
                 ~href: "goal.html"
-                "Rhombus Goals"
+                "Goals"
             section_entry:
               entry_a:
                 ~href: "faq.html"
