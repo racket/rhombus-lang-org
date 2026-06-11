@@ -5,6 +5,7 @@ import:
   "private/style.rhm" open
   "private/head.rhm"
   "private/write.rhm"
+  "private/rhombus.rhm" open
 
 def doc_url:
   "https://docs.racket-lang.org/rhombus/index.html?fam=Rhombus&fam=rhombus"
@@ -40,120 +41,135 @@ write.write(
       prose_column:
         q:
           ~style: (css: ~margin_top: "2em")
-          @{What kind of programming language is Rhombus?}
+          @para{What kind of programming language is Rhombus?}
         p:
-          @{@a(~href: "https://rhombus-lang.org/"){Rhombus}
-            is a general-purpose, functional, extensible programming language with
-             @a(~href: "performance.html"){good performance},
-             @a(~href: doc_url){extensive documentation}, and
-             @a(~href: pkg_url){practical libraries}. It's a dynamic language
-             that offers interactivity and flexibility, but it also has the
-             static and abstraction-enforcing constructs that are
-             needed to scale from small scripts to large systems.}
+          @para{@a(~href: "https://rhombus-lang.org/"){Rhombus}
+                is a general-purpose, functional, extensible programming language with
+                @a(~href: "performance.html"){good performance},
+                @a(~href: doc_url){extensive documentation}, and
+                @a(~href: pkg_url){practical libraries}. It's a dynamic language
+                that offers interactivity and flexibility, but it also has the
+                static and abstraction-enforcing constructs that are
+                needed to scale from small scripts to large systems.}
         q:
-          @{Aren't there a lot of languages like that already?}
+          @para{Aren't there a lot of languages like that already?}
         p:
-          @{While there are many small things we think are unique to Rhombus,
-            including compact repetitions using ellipsis (@tt{...}) and
-            a default set of functional data stuctures with good asymptoptic
-            complexity, the big difference is extensibility.
-            See @a(~href: "goal.html"){Rhombus Goals}.}
+          @para{While there are many small things we think are unique to Rhombus,
+                including compact repetitions using ellipsis (@tt{...}) and
+                a default set of functional data stuctures with good asymptoptic
+                complexity, the big difference is extensibility.
+                See @a(~href: "goal.html"){Rhombus Goals}.}
         q:
-          @{Is is fast?}
+          @para{Is is fast?}
         p:
-          @{Here are @a(~href: "performance.html"){some benchmarks}.}
+          @para{Here are @a(~href: "performance.html"){some benchmarks}.}
         q:
-          @{How do I get started?}
+          @para{How do I get started?}
         p:
-          @{See @a(~href: "https://docs.racket-lang.org/rhombus-getting-started/index.html?fam=Rhombus"){Getting Started}.}
+          @para{See @a(~href: "https://docs.racket-lang.org/rhombus-getting-started/index.html?fam=Rhombus"){Getting Started}.}
         q:
-          @{Do I have to use DrRacket?}
+          @para{Do I have to use DrRacket?}
         p:
-          @{The DrRacket programming environment is the easiest way to get started, but
-            see @a(~href: "https://marketplace.visualstudio.com/items?itemName=evzen-wybitul.magic-racket"){Magic Racket}
-            for VSCode or
-            @a(~href: "https://github.com/greghendershott/racket-mode"){Racket mode} (with its @tt{racket-hash-lang-mode} major mode)
-            for Emacs.}
+          @para{The DrRacket programming environment is the easiest way to get started, but
+                see @a(~href: "https://marketplace.visualstudio.com/items?itemName=evzen-wybitul.magic-racket"){Magic Racket}
+                for VSCode or
+                @a(~href: "https://github.com/greghendershott/racket-mode"){Racket mode} (with its @tt{racket-hash-lang-mode} major mode)
+                for Emacs.}
         q:
-          @{What is the relationship of Rhombus to Racket?}
+          @para{What is the relationship of Rhombus to Racket?}
         p:
-          @{Rhombus is built on @a(~href: "https://racket-lang.org"){Racket}, and
-            it relies on many Racket tools, including the DrRacket programming
-            environment and the @tt{raco} command-line suite.
-            Roughly, the languages
-            are related in the same way as
-            @a(~href: "https://elixir-lang.org/"){Elixir} and
-            @a(~href: "https://www.erlang.org/"){Erlang}
-            or @a(~href: "https://kotlinlang.org/"){Kotlin} and
-            @a(~href: "https://www.java.com/"){Java}.}
+          @para{Rhombus is built on @a(~href: "https://racket-lang.org"){Racket}, and
+                it relies on many Racket tools, including the DrRacket programming
+                environment and the @tt{raco} command-line suite.
+                Roughly, the languages
+                are related in the same way as
+                @a(~href: "https://elixir-lang.org/"){Elixir} and
+                @a(~href: "https://www.erlang.org/"){Erlang}
+                or @a(~href: "https://kotlinlang.org/"){Kotlin} and
+                @a(~href: "https://www.java.com/"){Java}.}
         p:
-          @{Then again, it would be fair to say
-            that Rhombus @i{is} just Racket, because Racket is meant to be a multi-language
-            ecosystem. Rhombus, in turn, is meant to push Racket's multi-language capabilities forward
-            and enable other languages and dialects that are built on Racket and Rhombus.}
+          @para{Then again, it would be fair to say
+                that Rhombus @i{is} just Racket, because Racket is meant to be a multi-language
+                ecosystem, and simply starting a Racket module with @hash_lang(rhombus)
+                instead of @hash_lang(racket) makes it a Rhombus module.
+                Rhombus, in turn, is meant to push Racket's multi-language capabilities forward
+                and enable more languages and dialects that are built on Racket and Rhombus.}
         q:
-          @{Rhombus is Racket without S-expressions, so the syntax is not homoiconic, right?}
+          @para{Rhombus is simply Racket with a different syntax, right?}
         p:
-          @{Hello, fellow Lisper! Rhombus has a
-            @a(~href: "https://parentheticallyspeaking.org/articles/bicameral-not-homoiconic/"){bicameral}
-            syntax, where the analog to the S-expression layer is
-            @a(~href: "https://docs.racket-lang.org/shrubbery/index.html?fam=Rhombus&famroot=rhombus"){shrubbery notation}.
-            This is an important part of Rhombus's approach to macros and metaprogramming.
-            You might be amused by this @a(~href: mc_url){little metacircular interpreter}.}
+          @para{A new syntax reflects the @a(~href: "goal.html"){main goal} of Rhombus, but @hash_lang(rhombus)
+                also improves on @hash_lang(racket) in other ways: better predefined
+                data structures (especially lists), a new class system, pervasive pattern
+                matching, extensible static information as a new point on the spectrum of
+                contracts to types, hierarchical namespace organization, and more.}
+        p:
+          @para{These general language improvements could have been implemented for a
+                Racket dialect that's based on S-expressions, but language--syntax codesign
+                for Rhombus opened more possibilities and produced a whole that's greater than the sum
+                of the parts.}
         q:
-          @{Is Rhombus useful only if I want to get into extensible languages,
-            domain-specific languages (DSLs), and/or macros?}
+          @para{Rhombus is Racket without S-expressions, so the syntax is not homoiconic, right?}
         p:
-          @{Using Rhombus does not necessarily mean writing macros, because Rhombus gives you
-            everything you expect (and probably a lot more) in the base language.
-            The fact that
-            a rich base language is made possible by macro extensibility could
-            be considered an implementation detail or an academic concern.
-            If you enjoy functional, dynamic languages and are interested in a modern
-            synthesis, Rhombus might be for you.}
+          @para{Hello, fellow Lisper! Rhombus has a
+                @a(~href: "https://parentheticallyspeaking.org/articles/bicameral-not-homoiconic/"){bicameral}
+                syntax, where the analog to the S-expression layer is
+                @a(~href: "https://docs.racket-lang.org/shrubbery/index.html?fam=Rhombus&famroot=rhombus"){shrubbery notation}.
+                This is an important part of Rhombus's approach to macros and metaprogramming.
+                You might be amused by this @a(~href: mc_url){little metacircular interpreter}.}
         q:
-          @{Are @i{macros} actually a good idea?}
+          @para{Is Rhombus useful only if I want to get into extensible languages,
+                domain-specific languages (DSLs), and/or macros?}
         p:
-          @{The design of Rhombus reflects a conviction that @i{metaprogramming}
-            is fundamental to software construction, and that the most effective
-            approach to metaprogramming is one that is integerated with a
-            general-purpose language.}
-        p:
-          @{In particular, accomodating domain-specific languages (DSLs)
-            within a general-purpose language avoids some common DSL pitfalls, such as
-            siloed languages that are difficult to integrate into an application, or half-baked
-            abstraction constructs added to a DSL that itself inevitably needs to evolve.
-            Meanwhile, taking metaprogramming seriously benefits not only DSLs, but also
-            metaprogramming tasks such as documentation, analysis, and tool support.}
-        p:
-          @{The term @i{macro} conjures a variety of
-            meanings and connotations. The approach taken in Rhombus might be
-            more precisely characterized as @i{compile-time metaprogramming}
-            or an @i{open-compiler API}, but its origins are in Lisp-style macros.}
+          @para{Using Rhombus does not necessarily mean writing macros, because Rhombus gives you
+                everything you expect (and probably a lot more) in the base language.
+                The fact that
+                a rich base language is made possible by macro extensibility could
+                be considered an implementation detail or an academic concern.
+                If you enjoy functional, dynamic languages and are interested in a modern
+                synthesis, Rhombus might be for you.}
         q:
-          @{Is Rhombus an academic language? A research language? A teaching language?}
+          @para{Are @i{macros} actually a good idea?}
         p:
-          @{Rhombus is rooted in academia, but it is not a teaching language,
-            and it is not just a research language. It is intended for production use.}
+          @para{The design of Rhombus reflects a conviction that @i{metaprogramming}
+                is fundamental to software construction, and that the most effective
+                approach to metaprogramming is one that is integerated with a
+                general-purpose language.}
         p:
-          @{Rhombus cannot yet
-            provide the wealth of libraries available for the most widely used languages.
-            But as an outgrowth of Racket, it has the resources and community needed to persist
-            and evolve. Users should expect a similar level of stability, consistency, and
-            support that Racket has offered for decades.}
+          @para{In particular, accomodating domain-specific languages (DSLs)
+                within a general-purpose language avoids some common DSL pitfalls, such as
+                siloed languages that are difficult to integrate into an application, or half-baked
+                abstraction constructs added to a DSL that itself inevitably needs to evolve.
+                Meanwhile, taking metaprogramming seriously benefits not only DSLs, but also
+                metaprogramming tasks such as documentation, analysis, and tool support.}
+        p:
+          @para{The term @i{macro} conjures a variety of
+                meanings and connotations. The approach taken in Rhombus might be
+                more precisely characterized as @i{compile-time metaprogramming}
+                or an @i{open-compiler API}, but its origins are in Lisp-style macros.}
         q:
-          @{Do we need new programmings languages or DSLs in an age of autonomous coding agents?}
+          @para{Is Rhombus an academic language? A research language? A teaching language?}
         p:
-          @{Who knows?}
+          @para{Rhombus is rooted in academia, but it is not a teaching language,
+                and it is not just a research language. It is intended for production use.}
         p:
-          @{A common early prediction around AI coding was that it would spell the end of new languages,
-            because AI would only be able to use the most popular languages as
-            represented in training data. That prediction has not panned out. As of May 2026,
-            (even before Rhombus 1.0), coding agents are pretty good at writing idiomatic
-            Rhombus code. Maybe @a(~href: doc_url){good documentation} helps.}
+          @para{Rhombus cannot yet
+                provide the wealth of libraries available for the most widely used languages.
+                But as an outgrowth of Racket, it has the resources and community needed to persist
+                and evolve. Users should expect a similar level of stability, consistency, and
+                support that Racket has offered for decades.}
+        q:
+          @para{Do we need new programmings languages or DSLs in an age of autonomous coding agents?}
         p:
-          @{As for DSLs, it seems possible that raising the level of discourse in programming
-            is good for human programmers, good for autonomous programming agents, and good for
-            conversations between them. In that case, we'll want languages with better DSL support,
-            and that is Rhombus's @a(~href: "goal.html"){goal}.}
+          @para{Who knows?}
+        p:
+          @para{A common early prediction around AI coding was that it would spell the end of new languages,
+                because AI would only be able to use the most popular languages as
+                represented in training data. That prediction has not panned out. As of May 2026,
+                (even before Rhombus 1.0), coding agents are pretty good at writing idiomatic
+                Rhombus code. Maybe @a(~href: doc_url){good documentation} helps.}
+        p:
+          @para{As for DSLs, it seems possible that raising the level of discourse in programming
+                is good for human programmers, good for autonomous programming agents, and good for
+                conversations between them. In that case, we'll want languages with better DSL support,
+                and that is Rhombus's @a(~href: "goal.html"){goal}.}
 )

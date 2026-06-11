@@ -33,9 +33,12 @@ def usual_head:
     style:
       slide_show_style
     style:
-      the_styles.to_css()
+      the_styles.to_css() ++ the_styles_more
     style:
       rhombus_styles.to_css()
+    link:
+      ~href: "https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap"
+      ~rel: "stylesheet"
     link:
       ~rel: "icon"
       ~type: "image/x-icon"

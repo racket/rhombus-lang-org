@@ -22,7 +22,7 @@ write.write(
   "index.html", 
   html:
     head:
-      head.usual_head      
+      head.usual_head
       script:
         slide_show.slide_show_script
       title:
@@ -103,7 +103,7 @@ write.write(
               docs("drawing", "rhombus-draw") +% ", "
               docs("GUIs", "rhombus-gui") +% ", "
               docs("parsing", "rhombus-parser") +% ", "
-              // docs("calling C libraries", "rhombus-ffi") +% ", "
+              docs("calling C libraries", "rhombus-ffi") +% ", "
               docs("documentation", "rhombus-scribble") +% ", "
               docs("animated slides", "rhombus-slideshow") +% ", "
               " and "
@@ -140,10 +140,82 @@ write.write(
             div:
               small_prose:
                 "... which means that Rhombus is compiled to machine code on-the-fly, "
-                "benefits from a mature tool chain and package system, "
+                "benefits from a mature tool chain and "
+                a:
+                  ~href: "https://pkgs.racket-lang.org/?fam=Rhombus"
+                  "package system"
+                ", "
                 "and has many additional libraries within "
                 a:
                   ~href: "https://docs.racket-lang.org/rhombus-racket/index.html?fam=Rhombus&famroot=rhombus"
                   "easy reach"
                 "."
+        section_column:
+          section_head:
+              "More About Rhombus"
+          section_content:
+            section_entry:
+              entry_a:
+                ~href: "goal.html"
+                "Rhombus Goals"
+            section_entry:
+              entry_a:
+                ~href: "faq.html"
+                "Frequently Asked Questions"
+            section_entry:
+              entry_a:
+                ~href: "performance.html"
+                "Performance"
+            section_entry:
+              entry_a:
+                ~href: doc_url
+                "Documentation"
+        section_column:
+          section_head:
+              "Community"
+          section_content:
+            section_entry:
+              entry_a:
+                ~href: "https://discord.gg/6Zq8sH5"
+                "Discord"
+              entry_desc:
+                @para{includes a @tt{#rhombus} channel}
+            section_entry:
+              entry_a:
+                ~href: "https://racket.discourse.group/"
+                "Discourse"
+              entry_desc:
+                @para{questions welcome at this Racket forum}
+            section_entry:
+              entry_a:
+                ~href: "https://racket-lang.org/rplf.html"
+                "Racket Programming Language Foundation"
+              entry_desc:
+                "contributions support our work"
+            section_entry:
+              entry_a:
+                ~href: "https://racket-lang.org/"
+                "Racket"
+              entry_desc:
+                @para{more community resources here}
+        section_column:
+          section_head:
+              "Packages, Sources, and Bug Reports"
+          section_content:
+            section_entry:
+              entry_a:
+                ~href: "https://pkgs.racket-lang.org/?fam=Rhombus"
+                "Packages"
+            section_entry:
+              entry_a:
+                ~href: "https://github.com/racket/rhombus"
+                @{GitHub @tt{racket/rhombus} Repository}
+              entry_desc:
+                "browse sources or report issues"
+            section_entry:
+              entry_a:
+                ~href: "download.html"
+                @{Download}
+              entry_desc:
+                "includes a source-archive option"
 )

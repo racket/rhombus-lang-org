@@ -8,8 +8,8 @@ import:
 
 def commit:
   a:
-    ~href: "https://github.com/mflatt/are-we-fast-yet/commit/b4b33d5a2810b1b716b410f43e61ffdd3d404836"
-    "b4b33d5a28"
+    ~href: "https://github.com/mflatt/are-we-fast-yet/commit/045c49eca54008a84259c9877610a57cbc381970"
+    "045c49eca5"
 
 write.write(
   "performance.html",      
@@ -28,11 +28,11 @@ write.write(
         head.rhombus_header(~title: "Rhombus Performance")
       prose_column:
         p:
-          @{Here tentative results for the }
+          @{Here are some results for the }
           a:
             ~href: "https://github.com/smarr/are-we-fast-yet"
             "Are We Fast Yet?"
-          @{ benchmarks.}
+          @{ benchmarks:}
         div:
           ~style: (css:
                      ~display: "flex"
@@ -47,14 +47,13 @@ write.write(
                      ~font_size: small_size
                      ~color: "gray"
                      ~padding: "0em 1em")
-          @{Commit @commit run on a 2022 M2 MacBook Pro; using
-              Java OpenJDK 26.0.1, Node.js v24.3.0, SBCL 2.4.4,
-              Rhombus 0.45 on Racket 9.2.0.5, Ruby 2.6.10p210,
-              and Python 3.13.7; running 10 iterations of each
-              behcmark. The Rhombus and SBCL implementations
-              are new. This is a good-faith effort to
-              report a useful, order-of-magnitude comparison,
-              but it could be wrong.}
+          @para{Commit @commit run on a 2022 M2 MacBook Pro; using
+                Java OpenJDK 26.0.1, Node.js v24.3.0,
+                Rhombus 0.45 on Racket 9.2.0.5, Ruby 2.6.10p210,
+                and Python 3.13.7; running 10 iterations of each
+                benchmark. Results are meant to provide a good-faith,
+                order-of-magnitude comparison, but they are not
+                publication-quality results.}
         p:
           @{These are imperative, object-oriented benchmarks
             that focus on the compiler and avoid predefined

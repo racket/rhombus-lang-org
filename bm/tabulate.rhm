@@ -13,9 +13,9 @@ def lines = filesystem.read_lines(result_txt)
 def baseline = "Java"
 
 def colors:
-  { "Java": "lightgreen",
-    "Node": "green",
-    "SBCL": "forestgreen",
+  { "Java": "green",
+    "Node": "forestgreen",
+    // "SBCL": "forestgreen",
     "Rhombus~": "red",
     "Rhombus": #false,
     "Ruby": "blue",
@@ -32,7 +32,8 @@ def mutable msecs :: Map.of(String, Map.of(String, Int)) = {}
 for (line in lines):
   let cols = line.split()
   let [bm, who, _, _, _, ms] = cols
-  msecs := msecs ++ { bm: (msecs.maybe[bm] || {}) ++ { who: ms.to_int() }}
+  when who in colors
+  | msecs := msecs ++ { bm: (msecs.maybe[bm] || {}) ++ { who: ms.to_int() }}
 
 def { bm: _, ... } = msecs
 
@@ -104,7 +105,7 @@ when noisy
 | avgs
 
 def avg_plot:
-  plot(~label: "Geometic mean", avgs)
+  plot(~label: "Geometic mean of all benchmarks", avgs)
 
 avg_plot
 
@@ -115,6 +116,7 @@ def bms_plot:
 bms_plot
 
 fun save_to_file(p :: pict.Pict, filename :: PathString):
+  filesystem.delete(filename, ~must_exist: #false)
   let dc = draw.SVGDC([math.exact(math.ceiling(p.width)),
                        math.exact(math.ceiling(p.height))],
                       ~output: Path(filename))

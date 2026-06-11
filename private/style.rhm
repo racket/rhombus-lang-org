@@ -11,6 +11,9 @@ def text_font = "'Charter-Racket', serif"
 def text_size = "14pt"
 def small_size = "12pt"
 def tiny_size = "10pt"
+def skew = "skew(-0.3rad)"
+def border_color = "2px solid #3e5ba9"
+def special_section_color = "#9f1d20"
 
 styles the_styles:
   span.def namefont:
@@ -20,7 +23,7 @@ styles the_styles:
   span.def major_section:
     ~font_family: section_font
     ~font_size: "24pt"
-    ~color: "#9f1d20"
+    ~color: special_section_color
 
   span.def big_head:
     ~font_family: section_font
@@ -29,6 +32,9 @@ styles the_styles:
   span.def small_head:
     ~font_family: section_font
     ~font_size: small_size
+
+  span.def section_head ~implies big_head:
+    ~color: special_section_color
 
   span.def prose:
     ~font_family: text_font
@@ -41,8 +47,28 @@ styles the_styles:
   div.def prose_column:
     ~font_family: text_font
     ~font_size: text_size
-    ~max_width: "40em"
+    ~width: "40em"
     ~margin: "auto"
+
+  div.def section_column ~implies prose_column:
+    ~margin_top: "2em"
+    ~width: "44em"
+    ~padding: "1em 2em"
+    ~position: "relative"
+    // See also `.section-column::after` below
+
+  div.def section_content:
+    ~margin_left: "3em"
+    ~margin_right: "3em"
+
+  div.def section_entry:
+    ~margin_top: "0.5em"
+
+  a.def entry_a:
+    ~font_family: section_font
+
+  span.def entry_desc:
+    ~padding_left: "0.75em"
 
   div.def slideshow_container:«»
   a.def next:«»
@@ -54,6 +80,7 @@ styles the_styles:
 
   span.def tt:
     ~font_family: "'Fira-Mono', monospace"
+    ~font_size: "85%"
 
   div.def column:
     ~margin_left: "3em"
@@ -72,7 +99,7 @@ styles the_styles:
     ~font_family: name_font
     ~font_size: "14pt"
     ~text_decoration: "none"
-    ~transform: "skew(-0.3rad)"
+    ~transform: skew
     ~align_self: "start"
     ~white_space: "nowrap"
 
@@ -86,7 +113,7 @@ styles the_styles:
   a.def outline_button ~implies button_common:
     ~padding: "8px"
     ~padding_top: "11px"
-    ~border: "2px solid #3e5ba9"
+    ~border: border_color
     ~border_radius: "3px"
     ~background_color: "transparent"
     ~color: "#3e5ba9"
@@ -95,3 +122,18 @@ styles the_styles:
     ~display: "grid"            
     ~grid_template_columns: "repeat(2, auto)"
     ~max_width: "22em"
+
+def the_styles_more:
+  @str|{
+
+.section-column::after {
+  content: "";
+  position: absolute;
+  inset: 0;                 /* matches the div's box */
+  background: #f0f0f8;
+  z-index: -1;
+  transform: |@skew;
+  pointer-events: none;     /* so the overlay doesn't eat clicks */
+}
+
+}|

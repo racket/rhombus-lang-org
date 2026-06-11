@@ -7,11 +7,13 @@ import:
   lib("scribble/xref.rkt")
   lib("setup/xref.rkt").#{load-collections-xref}
   lib("rhombus/scribble/private/rhombus-spacer.rhm") open
+  "style.rhm".tt
 
 export:
   rhombus
   rhombusblock
   rhombusblock_etc
+  hash_lang
   typeset
   rhombus_styles
 
@@ -93,3 +95,18 @@ render_macros (rhombus,
   ~render_block: render_block
   ~escape: #,
   ~result: Fmt
+
+fun _hash_lang(name_sym):
+  let name= to_string(name_sym)
+  span:
+    tt:
+      doc_a:
+        ~href: "https://docs.racket-lang.org/guide/Module_Syntax.html#%28part._hash-lang%29"
+        "#lang"
+      " "
+      doc_a:
+        ~href: "http://docs.racket-lang.org/local-redirect/index.html?tag=%28mod-path._.%27" ++ name ++ ".%27%29"
+        name
+
+macro 'hash_lang($id)':
+  '_hash_lang(#' $id)'
