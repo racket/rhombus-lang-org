@@ -78,9 +78,20 @@ styles the_styles:
   span.def dot:«»
   div.def text:«»
 
-  span.def tt:
+  span.def tt_font:
     ~font_family: "'Fira-Mono', monospace"
+
+  span.def tt ~implies tt_font:
     ~font_size: "85%"
+
+  span.def big_tt ~implies tt_font:
+    ~font_size: "100%"
+
+  div.def rhombus_column:
+    ~display: "flex"
+    ~flex_direction: "column"
+    ~align_items: "center"
+    ~padding_top: "10px"        
 
   div.def column:
     ~margin_left: "3em"

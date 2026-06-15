@@ -1,57 +1,299 @@
-#lang rhombus/static
+#lang rhombus/static/and_meta
 
 import:
-  html/page open  
+  html/page open
+  json
+  "private/installer.rhm"
   "private/style.rhm" open
   "private/head.rhm"
   "private/write.rhm"
+  "private/head.rhm".head_width
 
-write.write(
-  "download.html",      
+def all_versions:
+  // last in this list is the current version
+  [
+    ["0.45", "9.1", "March 2026"],
+    ["0.47", "9.2", "June 2026"],
+  ]
+
+def [_, ..., [current_vers, & _]] = all_versions
+
+def main_mirror = "https://users.cs.utah.edu/plt/rhombus/"
+
+elem select
+elem option
+
+def bullet:
+  span:
+    ~style: (css:
+               ~margin: "1em 1em")
+    " • "
+
+styles download_styles:
+  div.def base_note_style:
+    ~font_size: "85%"
+    ~width: "600px"
+    ~margin_top: "1ex"
+    ~padding: "1ex 1ex 1ex 1ex"
+    ~text_align: "left"
+    ~line_height: "1.5em"
+    ~font_family: section_font
+  div.def note ~implies base_note_style:
+    ~display: "none"
+    ~background_color: "#edd"
+  div.def always_note ~implies base_note_style:
+    ~background_color: "#eed"
+  div.def note_title:
+    ~font_weight: "bold"
+
+fun make(vers :: String, racket_vers :: String, date :: String):
+  let installers: installer.extract(vers)
+  let installers_map:
+    let [inst, ...] = installers
+    { inst["label"]: inst, ... }
+
+  def download_script:
+    @str|{
+      document.addEventListener('DOMContentLoaded', () => {
+        const sel = document.getElementById("platform_selector")
+        const dl = document.getElementById("download_button")
+        function update_for_selected_platform() {
+          let i = sel.value;
+          document.getElementById("installer_name").innerHTML = installers_map[i]["installer"];
+          document.getElementById("run_installer_name").innerHTML = installers_map[i]["installer"];
+          document.getElementById("installer_size").innerHTML = installers_map[i]["human_size"];
+          dl.href = "|@(main_mirror ++ "/" ++ vers ++ "/installers/")" + installers_map[i]["installer"];
+          let platform = installers_map[i]["platform"]
+          function do_note(name, on) {
+            document.getElementById(name).style.display = (on ? "block" : "none")
+          }
+          do_note("linux_explain", platform == "Linux")
+          do_note("linux_install_explain", platform == "Linux")
+          do_note("intel_mac_explain", platform == "Mac OS")
+          do_note("builtpkgs_explain", installers_map[i]["label"] == "Source")
+        }
+        sel.addEventListener("change", (e) => { update_for_selected_platform() });
+        update_for_selected_platform();
+        function order_for_platform(ua) {
+          var lifts = {}
+          function mentions(str) {
+            return (navigator.platform.indexOf(str) != -1)
+                   || (navigator.appVersion.indexOf(str) != -1)
+                   || (navigator.userAgent.indexOf(str) != -1);
+          }
+          if (ua && ua.platform == 'Windows' && ua.architecture === 'arm' && ua.bitness === '64') {
+             lifts = { "Windows (64-bit Arm)": -2, "Windows": -1 }
+          } else if (mentions("Win")) {
+             lifts = { "Windows": -1 }
+          } else if (mentions("Mac")) {
+             lifts = { "Mac OS": -1 }
+          } else if (mentions("Linux")) {
+             lifts = { "Linux": -1 }
+          }
+          function find(inst, order_key, lift_key) {
+             let v = lifts[inst[lift_key]]
+             if (v !== undefined) {
+                return v;
+             } else {
+                return inst[order_key];
+             }
+          }
+          let sorted_installers = installers.slice()
+          sorted_installers.sort(function (a, b) {
+                                   let a_order = find(a, "order", "platform")
+                                   let b_order = find(b, "order", "platform")
+                                   if (a_order == b_order) {
+                                     let a_detail = find(a, "detail_order", "label")
+                                     let b_detail = find(b, "detail_order", "label")
+                                     return a_detail - b_detail
+                                   } else {
+                                     return a_order - b_order
+                                   }
+                                 });
+          sel.replaceChildren(...sorted_installers.map(l => { return new Option(l["label"], l["label"]); }));
+          update_for_selected_platform();
+        }
+        if (navigator.userAgentData && navigator.userAgentData.getHighEntropyValues) {
+          navigator.userAgentData.getHighEntropyValues(["architecture", "bitness"])
+          .then(ua => { order_for_platform(ua); })
+        } else {
+           order_for_platform(false)
+        }
+      });
+    }|
+
   html:
     head:
-      head.usual_head      
+      head.usual_head
+      style:
+        download_styles.to_css()      
+      script:
+        @str{ const installers = @(json.to_string(installers))
+              const installers_map = @(json.to_string(installers_map)) }
+      script:
+        download_script
+      link:
+        ~rel: "preconnect"
+        ~href: "https://fonts.googleapis.com"
+      link:
+        ~rel: "preconnect"
+        ~href: "https://fonts.gstatic.com"
+        ~crossorigin: ""
+      link:
+        ~rel: "stylesheet"
+        ~href: "https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0&icon_names=download"
       title:
         @str{Rhombus Download}
     body:
-      div:
-        ~style: (css:
-                   ~display: "flex"
-                   ~flex_direction: "column"
-                   ~align_items: "center"
-                   ~padding_top: "10px")
+      rhombus_column:
         head.rhombus_header(~title: "Rhombus Download")
         div:
           ~style: (css:
-                     ~max_width: "600px"
-                     ~margin: "2em 0 0 0")
-          prose:
-            @str{Two options for installing Rhombus:}
-          p:
+                     ~margin_top: "1em"
+                     ~width: head_width)
+          major_section:
+            "Option 1: Combined Rhombus + Racket Install"
+        div:
+          ~style: (css:
+                     ~margin_top: "1em")
+          big_head:
+            "Version " ++ vers
+          small_head:
             ~style: (css:
-                       ~margin: "2em 0 0 0")
-            row:
-              button:
-                ~href: "https://users.cs.utah.edu/plt/rhombus-snapshots/"
-                @str{Install a snapshot Racket with Rhombus included}
-          p:
-            small_prose:
-              "This is a good option if you don’t already have Racket"
-              "—at least, in the short term and for common machine types."
-              " The snapshot-specific package catalog will eventually expire,"
-              " unlike a regular Racket distribution."
-          p:
+                       ~margin_left: "1ex")
+            "on Racket version " ++ racket_vers
+          small_head:
             ~style: (css:
-                       ~margin: "2em 0 0 0")
-            row:
-              button:
-                ~href: "https://download.racket-lang.org/"
-                @str{Install a regular Racket distribution}
+                       ~color: "gray"
+                       ~margin_left: "2ex")
+            date
+        div:
+          ~style: (css:
+                     ~margin_top: "1em")
+          small_head:
+            "Platform:"
+          select:
+            ~style: (css:
+                       ~margin_left: "1ex"
+                       ~font_family: section_font
+                       ~font_size: small_size)
+            ~id: "platform_selector"
+            installers.map(
+              fun (inst :: Map):
+                option:                  
+                  inst["label"]
+            )
+        div:
+          ~style: (css:
+                     ~margin_top: "2em"
+                     ~display: "flex")
+          button:
+            ~id: "download_button"
+            ~href: "download.html"
+            span:
+              ~class: "material-symbols-outlined"
+              ~style: (css:
+                         ~font_size: "16pt"
+                         ~transform: "translate(0px, 5px)")
+              "download"
+            span:
+              ~style: (css:
+                         ~margin_left: "1ex")
+              ~id: "installer_name"
+              installers[0]["installer"]
+            span:
+              ~style: (css:
+                         ~margin_left: "1ex"
+                         ~font_size: tiny_size)
+              "("
+              span:
+                ~id: "installer_size"
+                installers[0]["human_size"]
+              ")"
+        div:
+          ~style: (css:
+                     ~margin_top: "2em"
+                     ~margin_bottom: "1em")
+          small_head:
+            a:
+              ~href: main_mirror ++ "/" ++ vers ++ "/index.html" 
+              "More Installers and Checksums"
+        note:
+          ~id: "linux_explain"
+          div:
+            note_title: "About the Linux installer:"
+            @{The Linux build is generic enough that it should work on most
+              distributions, including relatively old distributions. Racket
+              may also be available through your distribution's package manager,
+              in which case Option 2 below may work better, as long as the available
+              version is not much older than the latest Racket version.}
+        note:
+          ~id: "linux_install_explain"
+          div:
+            note_title: "Running the Linux installer:"
+            @{After downloading the installer file, run it with}
+            div:
+              tt:
+                ~id: "run_installer_name"
+                "rhombus_racket.sh"
+            @{to install, possibly adding @tt{sudo}
+              to the start of the command
+              to install to a location that requires administrator access.}
+        note:
+          ~id: "intel_mac_explain"
+          note_title: "Intel Mac users:"
+          @{Select the @b{64-bit Intel} option in @b{Platform}.}
+        note:
+          ~id: "builtpkgs_explain"
+          div:
+            note_title: "About source distributions:"
+            @{The @b{Source + built packages}
+              distribution is recommended, instead of the selected
+              @b{Source} distribution.
+              The @b{Source + built packages} distribution includes pre-built,
+              platform-independent bytecode; it installs much faster than
+              plain source, and it is also compatible with fast installs of
+              additional Racket packages.}
+        always_note:
+          ~id: "upgrade_explain"
+          note_title: "When upgrading:"
+          @{To restore packages installed for a previous version of Racket, use
+              DrRacket's @b{File} > @b{Package Manager} > @b{Copy from Version}
+              or at a command line use @big_tt{raco pkg migrate}.}
+        div:
+          ~style: (css:
+                     ~margin_top: "2em")
+          small_head:
+            a:
+              ~href: "license.html" 
+              "License"
+            bullet
+            a:
+              ~href: "all_versions.html" 
+              "All Versions"
+            bullet
+            a:
+              ~href: "https://users.cs.utah.edu/plt/rhombus-snapshots/" 
+              "Snapshot Builds"
+        div:
+          ~style: (css:
+                     ~margin_top: "1em"
+                     ~width: head_width)
+          major_section:
+            "Option 2: Rhombus as a Package"
+        div:
+          ~style: (css:
+                     ~display: "flex"
+                     ~margin_top: "1em")
+          button:
+            ~href: "https://download.racket-lang.org/"
+            @str{Install Racket}
+        div:
           p:
             prose:
               "Then, install the "
               b:
-                tt: "rhombus"
+                tt: "rhombus-main"
               " package in one of these ways:"
           ul:
             li:
@@ -63,7 +305,7 @@ write.write(
                   "Enter "
                   b:
                     tt:
-                      "rhombus"
+                      "rhombus-main"
                   " as the package to install."
             li:
               p:
@@ -75,9 +317,102 @@ write.write(
                 prose:
                   b:
                     tt:
-                      "raco pkg install rhombus"
-          p:
-            small_prose:
-              "This is a good option if you already have Racket,"
-              " need more install options, or need longer-term support."
-)
+                      "raco pkg install rhombus-main"
+        always_note:
+          ~id: "catalog_explain"
+          note_title: "To get version " ++ vers ++ " specifically:"
+          @para{Use the package catalog}
+          div:
+            div:
+              ~style: (css:
+                         ~text_align: "center")
+              big_tt:
+                "https://download.rhombus-lang.org/releases/" ++ vers ++ "/catalog/"
+            if vers == current_vers
+            | ["or",
+               div:
+                 ~style: (css:
+                            ~text_align: "center")
+                 big_tt:
+                   "https://download.rhombus-lang.org/releases/current/catalog/",
+               "where the latter might be preconfigured in your Racket installation."]
+            | []            
+          div:
+            ~style: (css:
+                       ~margin_top: "1em")
+            @{To check or change the set of package catalogs that your Racket installation is using,
+              see DrRacket's @b{File} > @b{Package Manager} > @b{Settings} tab
+              or at a command line use @big_tt{raco pkg config}.}
+
+fun make_all_versions():
+  html:
+    head:
+      head.usual_head
+      style:
+        download_styles.to_css()      
+      title:
+        @str{Rhombus Versions}
+    body:
+      rhombus_column:
+        head.rhombus_header(~title: "Rhombus Versions")
+      column:
+        ~style: (css:
+                   ~padding_top: "2em"
+                   ~margin: "auto")
+        table:          
+          tr:
+            th:
+              ~style: (css:
+                         ~text_align: "left")
+              small_head:
+                "Version"
+            th:
+              ~style: (css:
+                         ~text_align: "left")
+              small_head:
+                "Release Date"
+          for List ([rhm, rkt, date, & _] in  all_versions):
+            tr:
+              td:
+                small_head:
+                  a:
+                    ~href: "rhombus-v" ++ rhm ++ ".html"
+                    "Version " ++ rhm
+              td:
+                small_head:
+                  date
+
+fun make_license():
+  html:
+    head:
+      head.usual_head
+      style:
+        download_styles.to_css()      
+      title:
+        @str{Rhombus Versions}
+    body:
+      rhombus_column:
+        head.rhombus_header(~title: "Rhombus License")
+      prose_column:
+        p:
+          @para{Rhombus and Racket are distributed under the
+                @a(~href: "https://www.apache.org/licenses/LICENSE-2.0"){Apache License, version 2.0}
+                and the @a(~href: "https://github.com/racket/racket/blob/master/racket/src/LICENSE-MIT.txt"){MIT License},
+                at your option.}
+        p:
+          @para{Some components of some Racket distributions are distributed under the
+                @a(~href: "http://www.gnu.org/licenses/lgpl-3.0.html"){GNU Lesser General Public License (LGPL) version 3.0}.
+                Any standalone program written in Rhombus or Racket is not affected by the license of those components.}
+        p:
+          @para{See the @a(~href: "https://github.com/racket/racket/blob/master/LICENSE.txt"){LICENSE}
+                file in the Racket source code for more information.}
+
+for ([rhm, rkt, date, & _] in all_versions):
+  write.write("rhombus-v" ++ rhm ++ ".html", make(rhm, rkt, date))
+block:
+  let [_, ..., [rhm, rkt, date, & _]] = all_versions
+  write.write("download.html", make(rhm, rkt, date))
+
+write.write("all_versions.html", make_all_versions())
+write.write("license.html", make_license())
+

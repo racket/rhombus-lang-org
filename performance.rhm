@@ -19,12 +19,7 @@ write.write(
       title:
         @str{Rhombus Performance}      
     body:
-      div:
-        ~style: (css:
-                   ~display: "flex"
-                   ~flex_direction: "column"
-                   ~align_items: "center"
-                   ~padding_top: "10px")
+      rhombus_column:
         head.rhombus_header(~title: "Rhombus Performance")
       prose_column:
         p:
