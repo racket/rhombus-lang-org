@@ -1,0 +1,15 @@
+#lang rhombus/static
+
+export:
+  current_vers
+  all_versions
+
+def all_versions:
+  // first in this list is the current version
+  [
+    ["1.0", "9.2", "June 2026"],
+    ["0.47", "9.2", "June 2026"],
+    ["0.45", "9.1", "March 2026"],
+  ]
+
+def [[current_vers, & _], & _] = all_versions

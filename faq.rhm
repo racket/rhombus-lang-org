@@ -50,12 +50,12 @@ write.write(
           @para{Aren't there a lot of languages like that already?}
         p:
           @para{While there are many small things we think are unique to Rhombus,
-                including compact repetitions using ellipsis (@tt{...}) and
+                including compact repetitions using ellipses (@tt{...}) and
                 a default set of functional data stuctures with good asymptoptic
                 complexity, the big difference is extensibility.
                 See @a(~href: "goal.html"){Rhombus Goals}.}
         q:
-          @para{Is is fast?}
+          @para{Is it fast?}
         p:
           @para{Here are @a(~href: "performance.html"){some benchmarks}.}
         q:

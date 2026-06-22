@@ -3,20 +3,12 @@
 import:
   html/page open
   json
+  "private/version.rhm" open
   "private/installer.rhm"
   "private/style.rhm" open
   "private/head.rhm"
   "private/write.rhm"
   "private/head.rhm".head_width
-
-def all_versions:
-  // last in this list is the current version
-  [
-    ["0.45", "9.1", "March 2026"],
-    ["0.47", "9.2", "June 2026"],
-  ]
-
-def [_, ..., [current_vers, & _]] = all_versions
 
 def main_mirror = "https://users.cs.utah.edu/plt/rhombus/"
 
@@ -29,6 +21,8 @@ def bullet:
                ~margin: "1em 1em")
     " • "
 
+def note_color = "#edd"
+
 styles download_styles:
   div.def base_note_style:
     ~font_size: "85%"
@@ -40,7 +34,7 @@ styles download_styles:
     ~font_family: section_font
   div.def note ~implies base_note_style:
     ~display: "none"
-    ~background_color: "#edd"
+    ~background_color: note_color
   div.def always_note ~implies base_note_style:
     ~background_color: "#eed"
   div.def note_title:
@@ -69,7 +63,7 @@ fun make(vers :: String, racket_vers :: String, date :: String):
           }
           do_note("linux_explain", platform == "Linux")
           do_note("linux_install_explain", platform == "Linux")
-          do_note("intel_mac_explain", platform == "Mac OS")
+          do_note("intel_mac_explain", platform == "Mac OS" && installers_map[i]["label"] != "Mac OS (64-bit Intel)")
           do_note("builtpkgs_explain", installers_map[i]["label"] == "Source")
         }
         sel.addEventListener("change", (e) => { update_for_selected_platform() });
@@ -233,10 +227,12 @@ fun make(vers :: String, racket_vers :: String, date :: String):
             note_title: "Running the Linux installer:"
             @{After downloading the installer file, run it with}
             div:
-              tt:
+              ~style: (css:
+                            ~text_align: "center")
+              big_tt:
                 ~id: "run_installer_name"
                 "rhombus_racket.sh"
-            @{to install, possibly adding @tt{sudo}
+            @{to install, possibly adding @big_tt{sudo}
               to the start of the command
               to install to a location that requires administrator access.}
         note:
@@ -299,7 +295,7 @@ fun make(vers :: String, racket_vers :: String, date :: String):
             li:
               p:
                 prose:
-                  "In DrRacket, choose “Install package...” from the “File” menu"
+                  @para{In DrRacket, choose @b{Install Package...} from the @b{File} menu.}
               p:
                 prose:
                   "Enter "
@@ -320,6 +316,8 @@ fun make(vers :: String, racket_vers :: String, date :: String):
                       "raco pkg install rhombus-main"
         always_note:
           ~id: "catalog_explain"
+          ~style: (css:
+                     ~background_color: note_color)
           note_title: "To get version " ++ vers ++ " specifically:"
           @para{Use the package catalog}
           div:
@@ -343,6 +341,24 @@ fun make(vers :: String, racket_vers :: String, date :: String):
             @{To check or change the set of package catalogs that your Racket installation is using,
               see DrRacket's @b{File} > @b{Package Manager} > @b{Settings} tab
               or at a command line use @big_tt{raco pkg config}.}
+        always_note:
+          ~id: "catalog_explain"
+          note_title: "Installation of package executables:"
+          @para{By default, packages are installed in a user-specific location, which means
+                that the @big_tt{rhombus} executable is not in the same place as the @big_tt{racket}
+                executable.}
+          p:
+            @para{If you have write access to the Racket installation, put Rhombus there
+                  through DrRacket's dialog by clicking @b{Show Options} and then
+                  changing @b{Package Scope} to @b{installation}, or include
+                  @big_tt(~style: (css: ~white_space: "nowrap")){-i}
+                  to the @big_tt{raco} command line:}
+          p:
+            ~style: (css:
+                       ~margin_left: "2em")
+            @big_tt{raco pkg install -i rhombus-main}
+          @para{Otherwise, run @a(~href: "find-user-exe.rkt"){this Racket module} to see
+                the path where user-scope executables are installed on your system.}
 
 fun make_all_versions():
   html:
@@ -410,7 +426,7 @@ fun make_license():
 for ([rhm, rkt, date, & _] in all_versions):
   write.write("rhombus-v" ++ rhm ++ ".html", make(rhm, rkt, date))
 block:
-  let [_, ..., [rhm, rkt, date, & _]] = all_versions
+  let [[rhm, rkt, date, & _], & _] = all_versions
   write.write("download.html", make(rhm, rkt, date))
 
 write.write("all_versions.html", make_all_versions())

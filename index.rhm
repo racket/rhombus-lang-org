@@ -7,6 +7,7 @@ import:
   "private/rhombus.rhm".typeset
   "private/example.rhm" open
   "private/slide_show.rhm"
+  "private/version.rhm"
   "private/write.rhm"
 
 def doc_url = "https://docs.racket-lang.org/rhombus/index.html?fam=Rhombus&famroot=rhombus"
@@ -111,15 +112,12 @@ write.write(
                 ~href: doc_url
                 "more"
               "."
-            tabular:
-              ~style: (css:
-                         ~gap: "1em"
-                         ~justify_items: "start")
-              outline_button:
-                ~href: "https://github.com/racket/rhombus"
-                @str{Work in Progress}
-              small_prose:
-                  "Nearly done: version 1.0 is coming soon!"
+            small_prose:
+              small_head:
+                "Current version: "
+                a:
+                  ~href: "download.html"
+                  version.current_vers
           column:
             div:
               ~style: (css:
