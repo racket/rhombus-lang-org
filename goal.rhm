@@ -25,7 +25,7 @@ write.write(
       prose_column:
         p:
           @{Modern programming languages reflect a consensus
-               on the the most important programming concepts, including
+               on the most important programming concepts, including
                lexically scoped variables, closures, objects, pattern matching,
                and type parametricity.
                Why, then, yet another programming language?}
