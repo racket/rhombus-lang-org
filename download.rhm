@@ -45,6 +45,7 @@ fun make(vers :: String, racket_vers :: String, date :: String):
   let installers_map:
     let [inst, ...] = installers
     { inst["label"]: inst, ... }
+  let more_installers_and_checksums = main_mirror ++ "/" ++ vers ++ "/index.html" 
 
   def download_script:
     @str|{
@@ -210,7 +211,7 @@ fun make(vers :: String, racket_vers :: String, date :: String):
                      ~margin_bottom: "1em")
           small_head:
             a:
-              ~href: main_mirror ++ "/" ++ vers ++ "/index.html" 
+              ~href: more_installers_and_checksums
               "More Installers and Checksums"
         note:
           ~id: "linux_explain"
@@ -341,6 +342,13 @@ fun make(vers :: String, racket_vers :: String, date :: String):
             @{To check or change the set of package catalogs that your Racket installation is using,
               see DrRacket's @b{File} > @b{Package Manager} > @b{Settings} tab
               or at a command line use @big_tt{raco pkg config}.}
+          div:
+            ~style: (css:
+                       ~margin_top: "1em")
+            @para{To download all package sources and a catalog that refers to them,
+                  instead of using the above catalog URLs,
+                  see the @b{Rhombus packages only} section of
+                  @a(~href: more_installers_and_checksums){the full installers list}.}
         always_note:
           ~id: "catalog_explain"
           note_title: "Installation of package executables:"
