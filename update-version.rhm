@@ -1,0 +1,13 @@
+#lang rhombus
+import:
+  lib("s3-sync/routing-rule.rkt") open
+  "private/version.rhm" open
+
+#{add-routing-rules}(
+ "download.rhombus-lang.org",
+ PairList[
+   #{redirect-prefix-routing-rule}(
+     ~#{old-prefix}: "releases/current/",
+     ~#{new-prefix}: "releases/" ++ current_vers ++ "/")
+ ]
+)
